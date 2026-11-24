@@ -45,6 +45,12 @@ jobs:
             # The exact original shell authority must survive the native merge.
             diff <(git show "HEAD:$file" | grep '^  bash:') <(grep '^  bash:' "$file")
             if [ "$role" != onboard ]; then
+              # Native update may rewrite the same import to a pinned remote reference.
+              # Verify the fetched local dependency against the reviewed upstream bytes.
+              gh api "repos/grove/farm/contents/workflows/shared/farm-investigation.md?ref=$FARM_SHA" --jq .content | base64 -d | cmp - .github/workflows/shared/farm-investigation.md
+              if grep -Fx "  - grove/farm/workflows/shared/farm-investigation.md@$FARM_SHA" "$file"; then
+                sed -i "s|^  - grove/farm/workflows/shared/farm-investigation.md@$FARM_SHA$|  - shared/farm-investigation.md|" "$file"
+              fi
               grep -Fx '  - shared/farm-investigation.md' "$file"
               grep -Fx '    staged: true' "$file"
               grep -Fx '    max: 1' "$file"
