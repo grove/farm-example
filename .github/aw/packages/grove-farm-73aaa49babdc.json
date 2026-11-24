@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "package": "grove/farm",
-  "source": "grove/farm@c4ef2f6277103cd7a92a6e5c8648da342c8069c0",
-  "resolvedCommit": "c4ef2f6277103cd7a92a6e5c8648da342c8069c0",
+  "source": "grove/farm@7cba1ed46aaf2e405d39e238c81f06bef489e2a5",
+  "resolvedCommit": "7cba1ed46aaf2e405d39e238c81f06bef489e2a5",
   "installer": "gh-aw v1.2.2",
   "files": [
     {
@@ -18,17 +18,17 @@
     {
       "source": "workflows/farm-gardener.md",
       "destination": ".github/workflows/farm-gardener.md",
-      "sha256": "419715a65e948b662bf5004c045b465d6167ad7db0c777e20e94f51f87fc1dc8"
+      "sha256": "e08f5af144273894dcd105d4a3a9e20976b2777dc11d0812ea95eb13ba98bbe4"
     },
     {
       "source": "workflows/farm-hunter.md",
       "destination": ".github/workflows/farm-hunter.md",
-      "sha256": "dc09acc8ca615ec4d9ed96baeb9245af92bc2b288131c534570451b0f74f3c55"
+      "sha256": "0e0ab24d58a86794c94d40a126f424e927a3cd21743c2378046250672c222a53"
     },
     {
       "source": "workflows/farm-onboard.md",
       "destination": ".github/workflows/farm-onboard.md",
-      "sha256": "8d96a0aa5f7b635ea7ad88e47fda9124580c1213394cb01a0912f0d46f04ece3"
+      "sha256": "427e157b4253f7632b6b4042909037daa0c5558994b096e8fc2349ce52897300"
     }
   ]
 }

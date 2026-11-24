@@ -9,6 +9,8 @@ permissions:
   issues: read
   pull-requests: read
 timeout-minutes: 30
+max-ai-credits: 100
+max-daily-ai-credits: 100
 concurrency:
   group: farm-investigation
   cancel-in-progress: false
@@ -26,11 +28,18 @@ safe-outputs:
   noop:
     report-as-issue: false
   report-failure-as-issue: false
+  report-failed-jobs: false
+  report-incomplete:
+    create-issue: false
+  threat-detection:
+    max-ai-credits: 50
+    report-as-issue: false
+    continue-on-error: false
   report-missing-tool: false
   report-missing-data:
     create-issue: false
-source: grove/farm@c4ef2f6277103cd7a92a6e5c8648da342c8069c0
-source-sha: "c4ef2f6277103cd7a92a6e5c8648da342c8069c0"
+source: grove/farm@7cba1ed46aaf2e405d39e238c81f06bef489e2a5
+source-sha: "7cba1ed46aaf2e405d39e238c81f06bef489e2a5"
 ---
 
 # Farm Onboard
