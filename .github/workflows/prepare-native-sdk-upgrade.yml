@@ -26,6 +26,8 @@ jobs:
           # Retire the completed, unowned diagnostic from this disposable copy.
           rm .github/workflows/farm-permission-probe.md .github/workflows/farm-permission-probe.lock.yml
           gh aw update https://github.com/grove/farm --cool-down 0 --no-release-bump --no-compile
+          git diff HEAD -- .github/workflows/farm-onboard.md .github/workflows/farm-hunter.md .github/workflows/farm-gardener.md
+          set -x
           for role in onboard hunter gardener; do
             file=".github/workflows/farm-$role.md"
             grep -Fx "source-sha: \"$FARM_SHA\"" "$file"
