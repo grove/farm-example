@@ -3,7 +3,9 @@ name: Farm Hunter
 description: Bounded hunter investigations for the consuming repository.
 on:
   workflow_dispatch:
-engine: copilot
+engine:
+  id: copilot
+  copilot-sdk: true
 permissions:
   contents: read
   issues: read
@@ -15,7 +17,7 @@ concurrency:
   group: farm-investigation
   cancel-in-progress: false
 imports:
-  - .github/aw/farm/investigation.md
+  - shared/farm-investigation.md
 tools:
   github:
     toolsets: [repos, issues, pull_requests]
@@ -45,8 +47,8 @@ safe-outputs:
   report-missing-tool: false
   report-missing-data:
     create-issue: false
-source: grove/farm@ad61c992a644c631784dbffe017c1b2722f79926
-source-sha: "ad61c992a644c631784dbffe017c1b2722f79926"
+source: grove/farm@d8fdd8197255b272c3b045e8be33ad166ed3410e
+source-sha: "d8fdd8197255b272c3b045e8be33ad166ed3410e"
 ---
 
 # Hunter
