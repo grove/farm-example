@@ -31,7 +31,7 @@ safe-outputs:
     max-uploads: 1
     retention-days: 14
     max-size-bytes: 65536
-    allowed-paths: ["farm-output/investigation.md"]
+    allowed-paths: ["farm-investigation.md"]
   noop:
     report-as-issue: false
   report-failure-as-issue: false
@@ -45,8 +45,8 @@ safe-outputs:
   report-missing-tool: false
   report-missing-data:
     create-issue: false
-source: grove/farm@7cba1ed46aaf2e405d39e238c81f06bef489e2a5
-source-sha: "7cba1ed46aaf2e405d39e238c81f06bef489e2a5"
+source: grove/farm@ad61c992a644c631784dbffe017c1b2722f79926
+source-sha: "ad61c992a644c631784dbffe017c1b2722f79926"
 ---
 
 # Hunter

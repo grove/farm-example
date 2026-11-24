@@ -24,7 +24,7 @@ safe-outputs:
     max-uploads: 1
     retention-days: 14
     max-size-bytes: 65536
-    allowed-paths: ["farm-output/onboarding.md"]
+    allowed-paths: ["farm-onboarding.md"]
   noop:
     report-as-issue: false
   report-failure-as-issue: false
@@ -38,8 +38,8 @@ safe-outputs:
   report-missing-tool: false
   report-missing-data:
     create-issue: false
-source: grove/farm@7cba1ed46aaf2e405d39e238c81f06bef489e2a5
-source-sha: "7cba1ed46aaf2e405d39e238c81f06bef489e2a5"
+source: grove/farm@ad61c992a644c631784dbffe017c1b2722f79926
+source-sha: "ad61c992a644c631784dbffe017c1b2722f79926"
 ---
 
 # Farm Onboard
@@ -66,7 +66,9 @@ Prefer linking to existing knowledge. Propose only needed additions to the proje
 
 ## Output for human review
 
-Write one compact Markdown proposal to `farm-output/onboarding.md`. Include scope, baseline, source map, starter territory entries, candidate instruments and evidence limitations, proposed minimal knowledge additions (or none), prioritized questions, and recommended manual staged calibration runs. Clearly mark uncertain claims, unapproved instruments and scope limitations. If time or context is insufficient, retain a bounded partial result or safe blocked indication.
+Write one compact Markdown proposal to `farm-onboarding.md`. Include scope, baseline, source map, starter territory entries, candidate instruments and evidence limitations, proposed minimal knowledge additions (or none), prioritized questions, and recommended manual staged calibration runs. Clearly mark uncertain claims, unapproved instruments and scope limitations. If time or context is insufficient, retain a bounded partial result or safe blocked indication.
+
+Create that exact filename at the workspace root using the configured edit tool. Do not overwrite an existing project file; if the name already exists or cannot be created, report the blocker. Call the configured artifact upload with the exact relative path `farm-onboarding.md`. Do not substitute another filename, create directories, use a temporary path outside the workspace or expand the tool permissions. A tool acknowledgment only stages the upload; do not claim final artifact delivery. If required staging fails, call `report_incomplete` with a safe limitation rather than `noop` or a success claim. The maintainer verifies final delivery after the run.
 
 Use the configured artifact upload for this single sanitized file. It is a real run artifact, not a private draft or trusted configuration. Never include secrets, production data, sensitive findings, raw logs, patches or credentials. If content cannot be safely recorded, omit it or stop; do not print it elsewhere. If no safe output is possible, use the configured noop with a safe explanation.
 
