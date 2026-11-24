@@ -1,0 +1,71 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '22'
+          package-manager-cache: false
+      - run: npm test
+
+  qualify-farm:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: github/gh-aw/actions/setup-cli@399a445fe2d8926c616b54b1b82a16b5b2be4445 # v1.2.2
+        with:
+          version: v1.2.2
+      - name: Install and compile the pinned package
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          FARM_REF: c4ef2f6277103cd7a92a6e5c8648da342c8069c0
+        run: |
+          set -euo pipefail
+          gh aw version
+          test "$(gh repo view --json nameWithOwner --jq .nameWithOwner)" = "$GITHUB_REPOSITORY"
+          test ! -e FARM.md
+          gh aw add "grove/farm@$FARM_REF" --no-security-scanner
+          gh aw compile --validate --strict
+          for role in onboard hunter gardener; do
+            test -s ".github/workflows/farm-$role.md"
+            test -s ".github/workflows/farm-$role.lock.yml"
+          done
+          test -s .github/aw/farm/investigation.md
+          test -s .github/aw/farm/project.example.md
+          test ! -e FARM.md
+          printf '\nInstallation footprint:\n'
+          git status --short --untracked-files=all
+          printf '\nCompiled Farm revision %s in %s. No agents dispatched.\n' "$FARM_REF" "$GITHUB_REPOSITORY"
+      - name: Upload installed files for review
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: farm-installation
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 7
+          path: |
+            .github/aw/
+            .github/workflows/farm-*.md
+            .github/workflows/farm-*.lock.yml
+            .github/skills/
+            .gitattributes
+            .vscode/
