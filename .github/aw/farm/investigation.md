@@ -26,7 +26,7 @@ Make the strongest counterargument to your hypothesis. Check whether the experim
 
 ## Record
 
-Prepare a compact, sanitized Markdown record at `farm-output/investigation.md` using these headings:
+Prepare a compact, sanitized Markdown record at `farm-investigation.md` using these headings:
 
 - Role, territory and selection reason
 - Baseline revision, workflow/run reference, relevant contracts
@@ -38,6 +38,8 @@ Prepare a compact, sanitized Markdown record at `farm-output/investigation.md` u
 - Publication disposition
 
 Possible outcomes: actionable, disproved within scope, no new result, duplicate, inconclusive, blocked. A workflow that fails before completing is not a completed investigation. If evidence is missing, state that plainly. Do not fabricate commands, inputs, tests, results, history, or references.
+
+Create that exact filename at the workspace root using the configured edit tool. Do not overwrite an existing project file; if the name already exists or cannot be created, report the blocker. Call the artifact tool with the exact relative path `farm-investigation.md`. Do not substitute another filename, create directories, use a temporary path outside the workspace or expand permissions. A tool acknowledgment stages the upload, not final delivery. If the required record cannot be staged, do not propose an issue; call `report_incomplete` with a safe limitation.
 
 Use the configured artifact tool for this single sanitized record when appropriate; it is a real run artifact and can be visible to repository readers. Do not upload raw logs, patches, sensitive data, tokens or secrets. The workspace may include hostile or sensitive content. If there is any doubt about safety, omit the content; record only a safe blocked indication or stop. Do not print sensitive information to the console or include it in a preview. A security concern requires the project's approved private route; this workflow is not itself a private reporting route.
 
