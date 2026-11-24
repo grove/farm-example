@@ -1,5 +1,5 @@
-# gh-aw-metadata: {"schema_version":"v4","frontmatter_hash":"808e8751993ae5736831a61deef53bd4d0714f79df543fbdc333e5b30c4a8710","body_hash":"5bfc3a0c9dfbcd39d4b1b0be2228ac590a5bac1b946b74b73ca87056c6b9e04b","compiler_version":"v1.2.2","strict":true,"agent_id":"copilot","engine_versions":{"copilot":"1.0.103"}}
-# gh-aw-manifest: {"version":1,"secrets":["COPILOT_GITHUB_TOKEN","GH_AW_DEFAULT_OTLP_ENDPOINT","GH_AW_DEFAULT_OTLP_HEADERS","GH_AW_GITHUB_MCP_SERVER_TOKEN","GH_AW_GITHUB_TOKEN","GITHUB_TOKEN"],"actions":[{"repo":"actions/checkout","sha":"3d3c42e5aac5ba805825da76410c181273ba90b1","version":"v7.0.1"},{"repo":"actions/download-artifact","sha":"9000827ccba6bdab643e8b6fd33ac0654aef8333","version":"v8.0.2"},{"repo":"actions/github-script","sha":"3a2844b7e9c422d3c10d287c895573f7108da1b3","version":"v9.0.0"},{"repo":"actions/setup-node","sha":"949feb2413d6458794dcd2491c4babbbce0c15c1","version":"v7.1.0"},{"repo":"actions/upload-artifact","sha":"cf430e030ddbb5b0abf93d22962f4752f3646cd9","version":"v7.0.2"},{"repo":"github/gh-aw-actions/setup","sha":"53d0749e19424a918acd82b4d140264ce48f2f14","version":"v1.2.2"}],"containers":[{"image":"ghcr.io/github/gh-aw-firewall/agent:0.29.11","digest":"sha256:8774a73c351395b41d2ad0af4ddb4689007c67de3cd08bd9f43bb8a0e300690e","pinned_image":"ghcr.io/github/gh-aw-firewall/agent:0.29.11@sha256:8774a73c351395b41d2ad0af4ddb4689007c67de3cd08bd9f43bb8a0e300690e"},{"image":"ghcr.io/github/gh-aw-firewall/api-proxy:0.29.11","digest":"sha256:88d2d0e315a504d93fd4fb8847fd0f6b7f4469f41a6fc6047b3dc9654c56ab2c","pinned_image":"ghcr.io/github/gh-aw-firewall/api-proxy:0.29.11@sha256:88d2d0e315a504d93fd4fb8847fd0f6b7f4469f41a6fc6047b3dc9654c56ab2c"},{"image":"ghcr.io/github/gh-aw-firewall/squid:0.29.11","digest":"sha256:861739ecf924dd2db5e5fb652db2ad82aaafd1615623297ddabc8f41a36b2847","pinned_image":"ghcr.io/github/gh-aw-firewall/squid:0.29.11@sha256:861739ecf924dd2db5e5fb652db2ad82aaafd1615623297ddabc8f41a36b2847"},{"image":"ghcr.io/github/gh-aw-mcpg:v0.5.6","digest":"sha256:342cd624e1f179d91be2de7a146fc4f387092e62e6c8a47506d7932e113d2311","pinned_image":"ghcr.io/github/gh-aw-mcpg:v0.5.6@sha256:342cd624e1f179d91be2de7a146fc4f387092e62e6c8a47506d7932e113d2311"},{"image":"ghcr.io/github/gh-aw-node","digest":"sha256:8735428c2d4e602f90781ba0c571c400e8ff93c7ee1508a75d71f87e34e415cc","pinned_image":"ghcr.io/github/gh-aw-node@sha256:8735428c2d4e602f90781ba0c571c400e8ff93c7ee1508a75d71f87e34e415cc"},{"image":"ghcr.io/github/github-mcp-server:v2.1.0","digest":"sha256:f6056fc10bfffcc8c81a6417a2e9ca12808647e8dd6049642a4feaadee0e0f8a","pinned_image":"ghcr.io/github/github-mcp-server:v2.1.0@sha256:f6056fc10bfffcc8c81a6417a2e9ca12808647e8dd6049642a4feaadee0e0f8a"}],"mcp_servers":[{"name":"github","tools":["get_commit","get_file_contents","get_latest_release","get_pull_request","get_pull_request_comments","get_pull_request_diff","get_pull_request_files","get_pull_request_review_comments","get_pull_request_reviews","get_pull_request_status","get_release_by_tag","get_tag","issue_read","list_branches","list_commits","list_issue_types","list_issues","list_pull_requests","list_releases","list_starred_repositories","list_tags","pull_request_read","search_code","search_issues","search_pull_requests","search_repositories"]},{"name":"safeoutputs","tools":["noop","report_incomplete","report_missing_data","upload_artifact"]}],"threat_detection":{"mode":"enabled"},"admission":false,"agent_metadata":{}}
+# gh-aw-metadata: {"schema_version":"v4","frontmatter_hash":"a58722860b16c0c5fb81d4d8de10e0702ed48776a734ee3fff7b74530485c5ed","body_hash":"5bfc3a0c9dfbcd39d4b1b0be2228ac590a5bac1b946b74b73ca87056c6b9e04b","compiler_version":"v1.2.2","strict":true,"agent_id":"copilot","engine_versions":{"copilot":"1.0.103"}}
+# gh-aw-manifest: {"version":1,"secrets":["COPILOT_GITHUB_TOKEN","GH_AW_DEFAULT_OTLP_ENDPOINT","GH_AW_DEFAULT_OTLP_HEADERS","GH_AW_GITHUB_MCP_SERVER_TOKEN","GH_AW_GITHUB_TOKEN","GITHUB_TOKEN"],"actions":[{"repo":"actions/checkout","sha":"3d3c42e5aac5ba805825da76410c181273ba90b1","version":"v7.0.1"},{"repo":"actions/download-artifact","sha":"9000827ccba6bdab643e8b6fd33ac0654aef8333","version":"v8.0.2"},{"repo":"actions/github-script","sha":"3a2844b7e9c422d3c10d287c895573f7108da1b3","version":"v9.0.0"},{"repo":"actions/setup-node","sha":"949feb2413d6458794dcd2491c4babbbce0c15c1","version":"v7.1.0"},{"repo":"actions/upload-artifact","sha":"cf430e030ddbb5b0abf93d22962f4752f3646cd9","version":"v7.0.2"},{"repo":"github/gh-aw-actions/setup","sha":"53d0749e19424a918acd82b4d140264ce48f2f14","version":"v1.2.2"}],"containers":[{"image":"ghcr.io/github/gh-aw-firewall/agent:0.29.11","digest":"sha256:8774a73c351395b41d2ad0af4ddb4689007c67de3cd08bd9f43bb8a0e300690e","pinned_image":"ghcr.io/github/gh-aw-firewall/agent:0.29.11@sha256:8774a73c351395b41d2ad0af4ddb4689007c67de3cd08bd9f43bb8a0e300690e"},{"image":"ghcr.io/github/gh-aw-firewall/api-proxy:0.29.11","digest":"sha256:88d2d0e315a504d93fd4fb8847fd0f6b7f4469f41a6fc6047b3dc9654c56ab2c","pinned_image":"ghcr.io/github/gh-aw-firewall/api-proxy:0.29.11@sha256:88d2d0e315a504d93fd4fb8847fd0f6b7f4469f41a6fc6047b3dc9654c56ab2c"},{"image":"ghcr.io/github/gh-aw-firewall/squid:0.29.11","digest":"sha256:861739ecf924dd2db5e5fb652db2ad82aaafd1615623297ddabc8f41a36b2847","pinned_image":"ghcr.io/github/gh-aw-firewall/squid:0.29.11@sha256:861739ecf924dd2db5e5fb652db2ad82aaafd1615623297ddabc8f41a36b2847"},{"image":"ghcr.io/github/gh-aw-mcpg:v0.5.6","digest":"sha256:342cd624e1f179d91be2de7a146fc4f387092e62e6c8a47506d7932e113d2311","pinned_image":"ghcr.io/github/gh-aw-mcpg:v0.5.6@sha256:342cd624e1f179d91be2de7a146fc4f387092e62e6c8a47506d7932e113d2311"},{"image":"ghcr.io/github/gh-aw-node","digest":"sha256:7776b61a1c1858fa5c7d7e224c10f4a9c748bb121f59c3196a4fc2d5e869480e","pinned_image":"ghcr.io/github/gh-aw-node@sha256:7776b61a1c1858fa5c7d7e224c10f4a9c748bb121f59c3196a4fc2d5e869480e"},{"image":"ghcr.io/github/github-mcp-server:v2.1.0","digest":"sha256:f6056fc10bfffcc8c81a6417a2e9ca12808647e8dd6049642a4feaadee0e0f8a","pinned_image":"ghcr.io/github/github-mcp-server:v2.1.0@sha256:f6056fc10bfffcc8c81a6417a2e9ca12808647e8dd6049642a4feaadee0e0f8a"}],"mcp_servers":[{"name":"github","tools":["get_commit","get_file_contents","get_latest_release","get_pull_request","get_pull_request_comments","get_pull_request_diff","get_pull_request_files","get_pull_request_review_comments","get_pull_request_reviews","get_pull_request_status","get_release_by_tag","get_tag","issue_read","list_branches","list_commits","list_issue_types","list_issues","list_pull_requests","list_releases","list_starred_repositories","list_tags","pull_request_read","search_code","search_issues","search_pull_requests","search_repositories"]},{"name":"safeoutputs","tools":["noop","report_incomplete","report_missing_data","upload_artifact"]}],"threat_detection":{"mode":"enabled"},"admission":false,"agent_metadata":{}}
 # This file was automatically generated by gh-aw (v1.2.2). DO NOT EDIT. To debug this workflow, load the skill at https://github.com/github/gh-aw/blob/main/debug.md
 #
 #    ___                   _   _
@@ -17,7 +17,7 @@
 #  \/  \/ \___/|_| |_|\_\|_| |_|\___/ \_/\_/ |___/
 #
 #
-# To update this file, edit grove/farm@ad61c992a644c631784dbffe017c1b2722f79926 and run:
+# To update this file, edit grove/farm@d8fdd8197255b272c3b045e8be33ad166ed3410e and run:
 #   gh aw compile
 # Not all edits will cause changes to this file.
 #
@@ -25,7 +25,7 @@
 #
 # Manually survey existing domain knowledge and propose a minimal onboarding plan.
 #
-# Source: grove/farm@ad61c992a644c631784dbffe017c1b2722f79926
+# Source: grove/farm@d8fdd8197255b272c3b045e8be33ad166ed3410e
 #
 # Secrets used:
 #   - COPILOT_GITHUB_TOKEN
@@ -48,7 +48,7 @@
 #   - ghcr.io/github/gh-aw-firewall/api-proxy:0.29.11@sha256:88d2d0e315a504d93fd4fb8847fd0f6b7f4469f41a6fc6047b3dc9654c56ab2c
 #   - ghcr.io/github/gh-aw-firewall/squid:0.29.11@sha256:861739ecf924dd2db5e5fb652db2ad82aaafd1615623297ddabc8f41a36b2847
 #   - ghcr.io/github/gh-aw-mcpg:v0.5.6@sha256:342cd624e1f179d91be2de7a146fc4f387092e62e6c8a47506d7932e113d2311
-#   - ghcr.io/github/gh-aw-node@sha256:8735428c2d4e602f90781ba0c571c400e8ff93c7ee1508a75d71f87e34e415cc
+#   - ghcr.io/github/gh-aw-node@sha256:7776b61a1c1858fa5c7d7e224c10f4a9c748bb121f59c3196a4fc2d5e869480e
 #   - ghcr.io/github/github-mcp-server:v2.1.0@sha256:f6056fc10bfffcc8c81a6417a2e9ca12808647e8dd6049642a4feaadee0e0f8a
 
 name: "Farm Onboard"
@@ -153,7 +153,7 @@ jobs:
           GH_AW_INFO_ENGINE_HARNESS: "copilot-cli"
           GH_AW_INFO_MODEL_CONFIG: '{"routing":{"enabled":false},"models":{"allowed":[],"blocked":[]},"max_ai_credits_source":"frontmatter"}'
           GH_AW_INFO_MAX_AI_CREDITS: "100"
-          GH_AW_INFO_FRONTMATTER_SOURCE: "grove/farm@ad61c992a644c631784dbffe017c1b2722f79926"
+          GH_AW_INFO_FRONTMATTER_SOURCE: "grove/farm@d8fdd8197255b272c3b045e8be33ad166ed3410e"
           GH_AW_INFO_BODY_MODIFIED: "false"
           GH_AW_COMPILED_STRICT: "true"
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
@@ -690,7 +690,7 @@ jobs:
           GH_AW_SKILL_DIR: ".github/skills"
         run: bash "${RUNNER_TEMP}/gh-aw/actions/restore_inline_skills.sh"
       - name: Download container images
-        run: bash "${RUNNER_TEMP}/gh-aw/actions/download_docker_images.sh" ghcr.io/github/gh-aw-firewall/agent:0.29.11@sha256:8774a73c351395b41d2ad0af4ddb4689007c67de3cd08bd9f43bb8a0e300690e ghcr.io/github/gh-aw-firewall/api-proxy:0.29.11@sha256:88d2d0e315a504d93fd4fb8847fd0f6b7f4469f41a6fc6047b3dc9654c56ab2c ghcr.io/github/gh-aw-firewall/squid:0.29.11@sha256:861739ecf924dd2db5e5fb652db2ad82aaafd1615623297ddabc8f41a36b2847 ghcr.io/github/gh-aw-mcpg:v0.5.6@sha256:342cd624e1f179d91be2de7a146fc4f387092e62e6c8a47506d7932e113d2311 ghcr.io/github/gh-aw-node@sha256:8735428c2d4e602f90781ba0c571c400e8ff93c7ee1508a75d71f87e34e415cc ghcr.io/github/github-mcp-server:v2.1.0@sha256:f6056fc10bfffcc8c81a6417a2e9ca12808647e8dd6049642a4feaadee0e0f8a
+        run: bash "${RUNNER_TEMP}/gh-aw/actions/download_docker_images.sh" ghcr.io/github/gh-aw-firewall/agent:0.29.11@sha256:8774a73c351395b41d2ad0af4ddb4689007c67de3cd08bd9f43bb8a0e300690e ghcr.io/github/gh-aw-firewall/api-proxy:0.29.11@sha256:88d2d0e315a504d93fd4fb8847fd0f6b7f4469f41a6fc6047b3dc9654c56ab2c ghcr.io/github/gh-aw-firewall/squid:0.29.11@sha256:861739ecf924dd2db5e5fb652db2ad82aaafd1615623297ddabc8f41a36b2847 ghcr.io/github/gh-aw-mcpg:v0.5.6@sha256:342cd624e1f179d91be2de7a146fc4f387092e62e6c8a47506d7932e113d2311 ghcr.io/github/gh-aw-node@sha256:7776b61a1c1858fa5c7d7e224c10f4a9c748bb121f59c3196a4fc2d5e869480e ghcr.io/github/github-mcp-server:v2.1.0@sha256:f6056fc10bfffcc8c81a6417a2e9ca12808647e8dd6049642a4feaadee0e0f8a
       - name: Prepare Safe Outputs Directories
         run: |
           mkdir -p "${RUNNER_TEMP}/gh-aw/safeoutputs"
@@ -850,7 +850,7 @@ jobs:
 
           mkdir -p "$HOME/.copilot"
           GH_AW_NODE=$(which node 2>/dev/null || command -v node 2>/dev/null || echo node)
-          cat << GH_AW_MCP_CONFIG_a8152aa73d0b888d_EOF | "$GH_AW_NODE" "${RUNNER_TEMP}/gh-aw/actions/start_mcp_gateway.cjs"
+          cat << GH_AW_MCP_CONFIG_e73917b6b81450c0_EOF | "$GH_AW_NODE" "${RUNNER_TEMP}/gh-aw/actions/start_mcp_gateway.cjs"
           {
             "mcpServers": {
               "github": {
@@ -872,7 +872,7 @@ jobs:
               },
               "safeoutputs": {
                 "type": "stdio",
-                "container": "ghcr.io/github/gh-aw-node@sha256:8735428c2d4e602f90781ba0c571c400e8ff93c7ee1508a75d71f87e34e415cc",
+                "container": "ghcr.io/github/gh-aw-node@sha256:7776b61a1c1858fa5c7d7e224c10f4a9c748bb121f59c3196a4fc2d5e869480e",
                 "mounts": ["\${GITHUB_WORKSPACE}:\${GITHUB_WORKSPACE}:rw", "${RUNNER_TEMP}/gh-aw/safeoutputs:${RUNNER_TEMP}/gh-aw/safeoutputs:rw", "/tmp/gh-aw:/tmp/gh-aw:rw"],
                 "args": ["-w", "\${GITHUB_WORKSPACE}"],
                 "entrypoint": "sh",
@@ -930,7 +930,7 @@ jobs:
               }
             }
           }
-          GH_AW_MCP_CONFIG_a8152aa73d0b888d_EOF
+          GH_AW_MCP_CONFIG_e73917b6b81450c0_EOF
       - name: Mount MCP servers as CLIs
         id: mount-mcp-clis
         continue-on-error: true
@@ -1474,7 +1474,7 @@ jobs:
           GH_AW_AGENT_OUTPUT: ${{ steps.setup-agent-output-env.outputs.GH_AW_AGENT_OUTPUT }}
           GH_AW_NOOP_MAX: "2"
           GH_AW_WORKFLOW_NAME: "Farm Onboard"
-          GH_AW_WORKFLOW_SOURCE: "grove/farm@ad61c992a644c631784dbffe017c1b2722f79926"
+          GH_AW_WORKFLOW_SOURCE: "grove/farm@d8fdd8197255b272c3b045e8be33ad166ed3410e"
           GH_AW_ENGINE_ID: "copilot"
           GH_AW_ENGINE_MODEL: ${{ needs.agent.outputs.model }}
           GH_AW_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
@@ -1501,7 +1501,7 @@ jobs:
           GH_AW_REPORT_INCOMPLETE_CREATE_ISSUE: "false"
           GH_AW_REPORT_INCOMPLETE_TITLE_PREFIX: "[incomplete]"
           GH_AW_WORKFLOW_NAME: "Farm Onboard"
-          GH_AW_WORKFLOW_SOURCE: "grove/farm@ad61c992a644c631784dbffe017c1b2722f79926"
+          GH_AW_WORKFLOW_SOURCE: "grove/farm@d8fdd8197255b272c3b045e8be33ad166ed3410e"
           GH_AW_ENGINE_ID: "copilot"
           GH_AW_ENGINE_MODEL: ${{ needs.agent.outputs.model }}
         with:
@@ -1520,7 +1520,7 @@ jobs:
         env:
           GH_AW_AGENT_OUTPUT: ${{ steps.setup-agent-output-env.outputs.GH_AW_AGENT_OUTPUT }}
           GH_AW_WORKFLOW_NAME: "Farm Onboard"
-          GH_AW_WORKFLOW_SOURCE: "grove/farm@ad61c992a644c631784dbffe017c1b2722f79926"
+          GH_AW_WORKFLOW_SOURCE: "grove/farm@d8fdd8197255b272c3b045e8be33ad166ed3410e"
           GH_AW_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
           GH_AW_AGENT_CONCLUSION: ${{ needs.agent.result }}
           GH_AW_ACTIVATION_RESULT: ${{ needs.activation.result }}
@@ -2065,7 +2065,7 @@ jobs:
       GH_AW_THREAT_DETECTION_AIC: ${{ needs.detection.outputs.aic }}
       GH_AW_WORKFLOW_ID: "farm-onboard"
       GH_AW_WORKFLOW_NAME: "Farm Onboard"
-      GH_AW_WORKFLOW_SOURCE: "grove/farm@ad61c992a644c631784dbffe017c1b2722f79926"
+      GH_AW_WORKFLOW_SOURCE: "grove/farm@d8fdd8197255b272c3b045e8be33ad166ed3410e"
     outputs:
       code_push_failure_count: ${{ steps.process_safe_outputs.outputs.code_push_failure_count }}
       code_push_failure_errors: ${{ steps.process_safe_outputs.outputs.code_push_failure_errors }}
