@@ -1,0 +1,49 @@
+name: Prepare hardened Farm (one-time)
+on:
+  push:
+    branches: [ci/prepare-hardened-farm]
+permissions:
+  contents: read
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+      - uses: github/gh-aw/actions/setup-cli@399a445fe2d8926c616b54b1b82a16b5b2be4445
+        with:
+          version: v1.2.2
+      - name: Upgrade and compile
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh aw add grove/farm@7cba1ed46aaf2e405d39e238c81f06bef489e2a5 --force --no-security-scanner
+          for role in onboard hunter gardener; do
+            file=".github/workflows/farm-$role.md"
+            grep -q '^timeout-minutes: 30$' "$file"
+            grep -q '^  threat-detection:$' "$file"
+            sed -i '/^timeout-minutes: 30$/a max-ai-credits: 100\nmax-daily-ai-credits: 100' "$file"
+            sed -i '/^  threat-detection:$/a\    max-ai-credits: 50' "$file"
+          done
+          gh aw compile --validate --strict
+          for role in onboard hunter gardener; do
+            lock=".github/workflows/farm-$role.lock.yml"
+            if grep -Eq 'GH_AW_REPORT_INCOMPLETE_CREATE_ISSUE: "true"|GH_AW_REPORT_FAILED_JOBS: "true"|GH_AW_FAILURE_REPORT_AS_ISSUE: "true"|GH_AW_NOOP_REPORT_AS_ISSUE: "true"|create_report_incomplete_issue|name: Log detection run|GH_AW_DETECTION_CONTINUE_ON_ERROR: "true"' "$lock"; then exit 1; fi
+            grep -nE 'MAX_AI_CREDITS|MAX_DAILY_AI_CREDITS|workflow_dispatch|report-incomplete' "$lock" | cut -c1-250
+          done
+          git status --short
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: hardened-farm
+          include-hidden-files: true
+          path: |
+            .github/aw/
+            .github/workflows/farm-*.md
+            .github/workflows/farm-*.lock.yml
+            .github/skills/
+            .gitattributes
+            .vscode/
