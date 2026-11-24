@@ -1,0 +1,82 @@
+name: Prepare bounded investigation instruments (one-time)
+on:
+  push:
+    branches: [ci/prepare-test-instruments]
+permissions:
+  contents: read
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+      - uses: github/gh-aw/actions/setup-cli@399a445fe2d8926c616b54b1b82a16b5b2be4445
+        with:
+          version: v1.2.2
+      - name: Compile consumer-only instrument permissions
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          for role in hunter gardener; do
+            file=".github/workflows/farm-$role.md"
+            grep -F '  bash: ["ls", "cat", "head", "tail", "grep", "wc", "git rev-parse", "git status", "git log", "git diff"]' "$file"
+            sed -i '/^  bash: /s/]$/, "node --version", "npm test", "node --test farm-probe.test.js"]/' "$file"
+          done
+          gh aw compile --validate --strict
+          for role in hunter gardener; do
+            lock=".github/workflows/farm-$role.lock.yml"
+            for rule in 'node --version' 'npm test' 'node --test farm-probe.test.js'; do
+              grep -F "# --allow-tool shell($rule)" "$lock"
+            done
+            grep -F 'GH_AW_MAX_AI_CREDITS: "100"' "$lock" >/dev/null
+            grep -F 'GH_AW_MAX_AI_CREDITS="50"' "$lock" >/dev/null
+            grep -F '\"allowed-paths\":[\"farm-investigation.md\"]' "$lock" >/dev/null
+            if grep -Eq '# --allow-tool shell\((node|npm)(:\*)?\)$|farm-output/|create_report_incomplete_issue|name: Log detection run|GH_AW_DETECTION_CONTINUE_ON_ERROR: "true"' "$lock"; then exit 1; fi
+          done
+          git diff --exit-code -- .github/workflows/farm-onboard.md .github/workflows/farm-onboard.lock.yml .github/aw/actions-lock.json
+          git status --short
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: qualified-test-instruments
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 7
+          path: |
+            .github/workflows/farm-hunter.md
+            .github/workflows/farm-hunter.lock.yml
+            .github/workflows/farm-gardener.md
+            .github/workflows/farm-gardener.lock.yml
+            CONTRIBUTING.md
+  transfer:
+    needs: compile
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    strategy:
+      matrix:
+        group: [hunter, gardener, other]
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
+        with:
+          name: qualified-test-instruments
+          digest-mismatch: error
+          path: ${{ runner.temp }}/farm
+      - shell: bash
+        working-directory: ${{ runner.temp }}/farm
+        env:
+          GROUP: ${{ matrix.group }}
+        run: |
+          set -euo pipefail
+          while IFS= read -r p; do
+            case "$p" in
+              ./.github/workflows/farm-hunter.md|./.github/workflows/farm-hunter.lock.yml) [[ "$GROUP" == hunter ]] || continue ;;
+              ./.github/workflows/farm-gardener.md|./.github/workflows/farm-gardener.lock.yml) [[ "$GROUP" == gardener ]] || continue ;;
+              ./CONTRIBUTING.md) [[ "$GROUP" == other ]] || continue ;;
+              *) exit 1 ;;
+            esac
+            printf 'FARM_HASH %s %s\n' "$p" "$(git hash-object "$p")"
+            base64 -w 2048 "$p" | sed "s|^|FARM_DATA $p |"
+          done < <(find . -type f | sort)
