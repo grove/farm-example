@@ -1,0 +1,39 @@
+name: Transfer hardened Farm
+on:
+  push:
+    branches: [ci/transfer-hardened]
+permissions:
+  actions: read
+  contents: read
+jobs:
+  transfer:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        group: [onboard, hunter, gardener, other]
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
+        with:
+          github-token: ${{ github.token }}
+          run-id: '45495920171'
+          artifact-ids: '14966944606'
+          digest-mismatch: error
+          path: ${{ runner.temp }}/farm
+      - shell: bash
+        working-directory: ${{ runner.temp }}/farm
+        env:
+          GROUP: ${{ matrix.group }}
+        run: |
+          set -euo pipefail
+          while IFS= read -r p; do
+            case "$p" in
+              ./.github/workflows/farm-*) [[ "$p" == *"farm-$GROUP."* ]] || continue ;;
+              *) [[ "$GROUP" == other ]] || continue ;;
+            esac
+            case "$p" in
+              ./.github/workflows/farm-*.md|./.github/workflows/farm-*.lock.yml|./.github/aw/*|./.github/skills/*|./.gitattributes|./.vscode/settings.json) ;;
+              *) exit 1 ;;
+            esac
+            printf 'FARM_HASH %s %s\n' "$p" "$(git hash-object "$p")"
+            base64 -w 2048 "$p" | sed "s|^|FARM_DATA $p |"
+          done < <(find . -type f | sort)
