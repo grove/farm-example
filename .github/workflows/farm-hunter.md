@@ -19,7 +19,7 @@ imports:
 tools:
   github:
     toolsets: [repos, issues, pull_requests]
-  bash: ["ls", "cat", "head", "tail", "grep", "wc", "git rev-parse", "git status", "git log", "git diff"]
+  bash: ["ls", "cat", "head", "tail", "grep", "wc", "git rev-parse", "git status", "git log", "git diff", "node --version", "npm test", "node --test farm-probe.test.js"]
   edit:
 safe-outputs:
   create-issue:
