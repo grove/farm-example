@@ -1,0 +1,125 @@
+name: Prepare native Farm upgrade and SDK calibration (one-time)
+on:
+  push:
+    branches: [ci/prepare-native-sdk-upgrade]
+permissions:
+  contents: read
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+      - uses: github/gh-aw/actions/setup-cli@399a445fe2d8926c616b54b1b82a16b5b2be4445
+        with:
+          version: v1.2.2
+      - name: Update native package and preserve consumer settings
+        env:
+          GH_TOKEN: ${{ github.token }}
+          FARM_SHA: d8fdd8197255b272c3b045e8be33ad166ed3410e
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(gh api repos/grove/farm/commits/main --jq .sha)" = "$FARM_SHA"
+          # Retire the completed, unowned diagnostic from this disposable copy.
+          rm .github/workflows/farm-permission-probe.md .github/workflows/farm-permission-probe.lock.yml
+          gh aw update https://github.com/grove/farm --cool-down 0 --no-release-bump --no-compile
+          for role in onboard hunter gardener; do
+            file=".github/workflows/farm-$role.md"
+            grep -Fx "source-sha: \"$FARM_SHA\"" "$file"
+            grep -Fx 'max-ai-credits: 100' "$file"
+            grep -Fx 'max-daily-ai-credits: 100' "$file"
+            grep -Fx '    max-ai-credits: 50' "$file"
+            grep -Fx '    continue-on-error: false' "$file"
+            grep -Fx '  workflow_dispatch:' "$file"
+            grep -Fx '  cancel-in-progress: false' "$file"
+            grep -Fx '  group: farm-investigation' "$file"
+            grep -Fx '  contents: read' "$file"
+            grep -Fx '  issues: read' "$file"
+            grep -Fx '  pull-requests: read' "$file"
+            grep -Fx 'timeout-minutes: 30' "$file"
+            # The exact original shell authority must survive the native merge.
+            diff <(git show "HEAD:$file" | grep '^  bash:') <(grep '^  bash:' "$file")
+            if [ "$role" != onboard ]; then
+              grep -Fx '  - shared/farm-investigation.md' "$file"
+              grep -Fx '    staged: true' "$file"
+              grep -Fx '    max: 1' "$file"
+              grep -Fx 'engine: copilot' "$file"
+              sed -i 's/^engine: copilot$/engine:\n  id: copilot\n  copilot-sdk: true/' "$file"
+            else
+              grep -Fx 'engine: copilot' "$file"
+            fi
+          done
+          test -s .github/workflows/shared/farm-investigation.md
+          test ! -e .github/aw/farm/investigation.md
+          test ! -e .github/workflows/farm-permission-probe.md
+          jq -e --arg sha "$FARM_SHA" '.resolvedCommit == $sha' .github/aw/packages/grove-farm-73aaa49babdc.json
+          gh aw compile --validate --strict
+          for role in onboard hunter gardener; do
+            lock=".github/workflows/farm-$role.lock.yml"
+            test -s "$lock"
+            grep -F 'GH_AW_MAX_AI_CREDITS: "100"' "$lock" >/dev/null
+            grep -F 'GH_AW_MAX_AI_CREDITS="50"' "$lock" >/dev/null
+            if grep -Eq 'create_report_incomplete_issue|name: Log detection run|GH_AW_DETECTION_CONTINUE_ON_ERROR: "true"|# --allow-tool shell\((node|npm)(:\*)?\)$|farm-output/' "$lock"; then exit 1; fi
+            if [ "$role" != onboard ]; then
+              grep -F 'GH_AW_COPILOT_SDK_TOOL_CONFIG:' "$lock" >/dev/null
+              grep -F '\"allowed-paths\":[\"farm-investigation.md\"]' "$lock" >/dev/null
+              for rule in 'node --version' 'npm test' 'node --test farm-probe.test.js'; do
+                grep -F "# --allow-tool shell($rule)" "$lock"
+              done
+            else
+              grep -F '\"allowed-paths\":[\"farm-onboarding.md\"]' "$lock" >/dev/null
+            fi
+          done
+          git diff --exit-code HEAD -- README.md CONTRIBUTING.md docs src test package.json LICENSE .github/workflows/ci.yml .github/skills .gitattributes .vscode
+          test ! -e FARM.md
+          git status --short
+          git diff --stat HEAD
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: native-sdk-upgrade
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 7
+          path: |
+            .github/aw/
+            .github/workflows/farm-*.md
+            .github/workflows/farm-*.lock.yml
+            .github/workflows/shared/farm-investigation.md
+            .github/skills/
+            .gitattributes
+            .vscode/
+            CONTRIBUTING.md
+  transfer:
+    needs: compile
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    strategy:
+      matrix:
+        group: [onboard, hunter, gardener, other]
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
+        with:
+          name: native-sdk-upgrade
+          digest-mismatch: error
+          path: ${{ runner.temp }}/farm
+      - shell: bash
+        working-directory: ${{ runner.temp }}/farm
+        env:
+          GROUP: ${{ matrix.group }}
+        run: |
+          set -euo pipefail
+          while IFS= read -r p; do
+            case "$p" in
+              ./.github/workflows/farm-*) [[ "$p" == *"farm-$GROUP."* ]] || continue ;;
+              *) [[ "$GROUP" == other ]] || continue ;;
+            esac
+            case "$p" in
+              ./.github/workflows/farm-*.md|./.github/workflows/farm-*.lock.yml|./.github/workflows/shared/farm-investigation.md|./.github/aw/*|./.github/skills/*|./.gitattributes|./.vscode/settings.json|./CONTRIBUTING.md) ;;
+              *) exit 1 ;;
+            esac
+            printf 'FARM_HASH %s %s\n' "$p" "$(git hash-object "$p")"
+            base64 -w 2048 "$p" | sed "s|^|FARM_DATA $p |"
+          done < <(find . -type f | sort)
