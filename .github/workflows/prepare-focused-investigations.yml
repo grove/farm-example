@@ -1,0 +1,107 @@
+name: Prepare focused investigations (one-time)
+on:
+  push:
+    branches: [ci/prepare-focused-investigations]
+permissions:
+  contents: read
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+      - uses: github/gh-aw/actions/setup-cli@399a445fe2d8926c616b54b1b82a16b5b2be4445
+        with:
+          version: v1.2.2
+      - name: Install reviewed candidate and preserve local authority
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          FARM_SHA: 44d8e12c5eea66418f43d17d400ae65b6f1af509
+        run: |
+          set -euo pipefail
+          gh aw add "grove/farm@$FARM_SHA" --force --no-security-scanner
+          for role in onboard hunter gardener; do
+            file=".github/workflows/farm-$role.md"
+            # Reapply exactly the locally approved settings, not a broader policy.
+            sed -i '/^timeout-minutes: 30$/a max-ai-credits: 100\nmax-daily-ai-credits: 100' "$file"
+            sed -i '/^  threat-detection:$/a\    max-ai-credits: 50' "$file"
+            if [ "$role" != onboard ]; then
+              sed -i 's/^engine: copilot$/engine:\n  id: copilot\n  copilot-sdk: true/' "$file"
+              sed -i '/^  bash: /s/]$/, "node --version", "npm test", "node --test farm-probe.test.js"]/' "$file"
+              grep -F '  - shared/farm-investigation.md' "$file"
+              grep -F '    staged: true' "$file"
+              grep -F '    max: 1' "$file"
+            fi
+            grep -Fx "source-sha: \"$FARM_SHA\"" "$file"
+            # Compare entire authority-bearing sections against previous installed
+            # sources, excluding the new manual input and source provenance.
+            diff <(git show "HEAD:$file" | sed -n '/^engine:/,/^source:/p' | sed '$d') <(sed -n '/^engine:/,/^source:/p' "$file" | sed '$d')
+          done
+          gh aw compile --validate --strict
+          for role in onboard hunter gardener; do
+            lock=".github/workflows/farm-$role.lock.yml"
+            test -s "$lock"
+            grep -F 'GH_AW_MAX_AI_CREDITS: "100"' "$lock" >/dev/null
+            grep -F 'GH_AW_MAX_AI_CREDITS="50"' "$lock" >/dev/null
+            if grep -Eq 'create_report_incomplete_issue|name: Log detection run|GH_AW_DETECTION_CONTINUE_ON_ERROR: "true"|# --allow-tool shell\((node|npm)(:\*)?\)$|farm-output/' "$lock"; then exit 1; fi
+            if [ "$role" != onboard ]; then
+              grep -F '      question:' "$lock"
+              grep -F 'Optional bounded investigation question and required evidence (no new authority)' "$lock"
+              grep -F 'GH_AW_COPILOT_SDK_TOOL_CONFIG:' "$lock" >/dev/null
+              grep -F '\"allowed-paths\":[\"farm-investigation.md\"]' "$lock" >/dev/null
+              for rule in 'node --version' 'npm test' 'node --test farm-probe.test.js'; do
+                grep -F "# --allow-tool shell($rule)" "$lock"
+              done
+            else
+              grep -F '\"allowed-paths\":[\"farm-onboarding.md\"]' "$lock" >/dev/null
+            fi
+          done
+          jq -e --arg sha "$FARM_SHA" '.resolvedCommit == $sha' .github/aw/packages/grove-farm-73aaa49babdc.json
+          git diff --exit-code HEAD -- README.md CONTRIBUTING.md docs src test package.json LICENSE .github/workflows/ci.yml .github/skills .gitattributes .vscode .github/workflows/shared/farm-investigation.md .github/aw/farm/project.example.md .github/aw/actions-lock.json
+          test ! -e FARM.md
+          git status --short
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: focused-investigations
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 7
+          path: |
+            .github/aw/packages/grove-farm-73aaa49babdc.json
+            .github/workflows/farm-*.md
+            .github/workflows/farm-*.lock.yml
+            CONTRIBUTING.md
+  transfer:
+    needs: compile
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    strategy:
+      matrix:
+        group: [onboard, hunter, gardener, other]
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
+        with:
+          name: focused-investigations
+          digest-mismatch: error
+          path: ${{ runner.temp }}/farm
+      - shell: bash
+        working-directory: ${{ runner.temp }}/farm
+        env:
+          GROUP: ${{ matrix.group }}
+        run: |
+          set -euo pipefail
+          while IFS= read -r p; do
+            case "$p" in
+              ./.github/workflows/farm-*) [[ "$p" == *"farm-$GROUP."* ]] || continue ;;
+              *) [[ "$GROUP" == other ]] || continue ;;
+            esac
+            case "$p" in
+              ./.github/workflows/farm-*.md|./.github/workflows/farm-*.lock.yml|./.github/aw/packages/grove-farm-73aaa49babdc.json|./CONTRIBUTING.md) ;;
+              *) exit 1 ;;
+            esac
+            printf 'FARM_HASH %s %s\n' "$p" "$(git hash-object "$p")"
+            base64 -w 2048 "$p" | sed "s|^|FARM_DATA $p |"
+          done < <(find . -type f | sort)
