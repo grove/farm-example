@@ -12,7 +12,7 @@ These are source-linked observations, not additional contracts. The public contr
 
 ### Exact-fit reservation boundary
 
-**Status:** reproduced by the maintainer-side review; implementation correction deferred for the reference project's evaluation. Do not treat the issue as fixed or claim it as a new discovery without new evidence.
+**Status:** experimentally reproduced by both maintainer-side review and Hunter; implementation correction deferred for the reference project's evaluation. Do not treat the issue as fixed or claim it as a new discovery without new evidence.
 
 Source: [Hunter run 45502751464](https://github.com/grove/farm-example/actions/runs/45502751464), [Gardener run 45504154692](https://github.com/grove/farm-example/actions/runs/45504154692), both at [`d1e427c`](https://github.com/grove/farm-example/commit/d1e427c621dc140d8795070349debedbca2bb98e). The agent reports were static for this boundary: the exact probe command did not execute. Gardener did run the unchanged baseline suite, which passed all five tests.
 
@@ -43,6 +43,39 @@ EOF
 ```
 
 Compare the returned status and complete snapshots with the contract and the table above. The existing test suite is not sufficient evidence of the exact-fit behavior. No production or test file was changed in the review.
+
+#### Agent-side experimental confirmation (2026-11-25)
+
+[Hunter run 45564218433](https://github.com/grove/farm-example/actions/runs/45564218433) used the native optional dispatch question to reproduce this already-reviewed defect. The runner checkout logs establish baseline [`17df96f`](https://github.com/grove/farm-example/commit/17df96f99ec85a60e1236e87c68c3c775bd577f0); the agent's own report omitted the SHA. Source, baseline tests and contract have the same Git blobs as the earlier reviewed observation. With gh-aw v1.2.2, native Copilot SDK mode and Node.js v24.22.3, `npm test` ran before creating the probe and exited 0 (5/5). The exact approved `node --test farm-probe.test.js` command executed and exited 1 (two failed assertions, two passing controls).
+
+The following is the actual transient test source from the tool log. For reproduction only, create it at the root of a disposable checkout of the cited revision if that filename is unused. Run the unchanged baseline first and then the focused command above. Do not add the file to the committed suite as part of an investigation.
+
+```js
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { CapacityLedger } from './src/ledger.js';
+
+// [initial reservation of 'a' (0 = none), requested qty for 'b', expected status, expected available after]
+const cases = [
+  ['exact fit, empty ledger', 0, 5, 'reserved', 0],
+  ['exact fit, after a:2', 2, 3, 'reserved', 0],
+  ['control: beyond capacity', 2, 4, 'insufficient', 3],
+  ['control: below capacity', 2, 2, 'reserved', 1],
+];
+
+for (const [name, initial, qty, status, remaining] of cases) {
+  test(name, () => {
+    const ledger = new CapacityLedger(5);
+    if (initial) ledger.reserve('a', initial);
+    const result = ledger.reserve('b', qty);
+    assert.deepEqual(result, { status });
+    assert.equal(ledger.available(), remaining);
+    assert.equal(ledger.snapshot().available, remaining);
+  });
+}
+```
+
+Both exact-fit cases returned `insufficient` instead of `reserved`. The two controls passed both status and availability assertions. The failed status assertions short-circuited the subsequent state assertions: the agent did not independently establish post-rejection state preservation. It read the contract, package manifest, source and reviewed observation but did not open the baseline test source. The initial compound orientation command was denied; the approved standalone test commands were not. This is experimental confirmation of a known discrepancy, not independent discovery or a production correction. The [delivered report](https://github.com/grove/farm-example/actions/runs/45564218433/artifacts/14999551476) and actual tool results agree. No duplicate issue was proposed, and no source or committed test was changed. This observation supersedes the earlier limitation that the agent had not executed the probe; retain the distinct maintainer-side snapshot evidence above.
 
 ### Structural investigation disposition
 
