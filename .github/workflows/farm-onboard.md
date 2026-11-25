@@ -38,8 +38,8 @@ safe-outputs:
   report-missing-tool: false
   report-missing-data:
     create-issue: false
-source: grove/farm@d8fdd8197255b272c3b045e8be33ad166ed3410e
-source-sha: "d8fdd8197255b272c3b045e8be33ad166ed3410e"
+source: grove/farm@44d8e12c5eea66418f43d17d400ae65b6f1af509
+source-sha: "44d8e12c5eea66418f43d17d400ae65b6f1af509"
 ---
 
 # Farm Onboard
